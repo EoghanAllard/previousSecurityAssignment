@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>All Products</title>
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">Welcome <span sec:authentication="name"></span><a href="/logout"> Logout</a></div>
+<div sec:authorize="isAnonymous()">Hi Guest! Please <a href="/login">Login</a> </div>
+
+<table style="width:100%">
+    <tr>
+        <th align="left">Code</th>
+        <th align="left">Name</th>
+        <th align="left">Description</th>
+        <th align="left">Buy Price</th>
+        <th align="left">Sell Price</th>
+        <th align="left">Qty</th>
+        <th align="left">Actions</th>
+    </tr>
+    <tr th:each="product: ${productList}">
+        <td><span th:text="${product.code}"></span></td>
+        <td><span th:text="${product.name}"></span></td>
+        <td><span th:text="${product.description}"></span></td>
+        <td><span th:text="${product.buyPrice}"></span></td>
+        <td><span th:text="${product.sellPrice}"></span></td>
+        <td><span th:text="${product.quantityInStock}"></span></td>
+        <td><a th:href="@{/product/delete/{code}(code=${product.code})}"><span th:text="Delete">Delete</span></a>
+            <a th:href="@{'/product/insert'}"><span th:text="Insert">Insert</span></a>
+      <div sec:authorize="hasAnyRole('SuperAdmin','Admin')"><a th:href="@{/product/delete/{code}(code=${product.code})}"><span th:text="Delete">Delete</span></a></div>
+       <div sec:authorize="hasRole('SuperAdmin')"><a th:href="@{'/product/insert'}"><span th:text="Insert">Insert</span></a></div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
